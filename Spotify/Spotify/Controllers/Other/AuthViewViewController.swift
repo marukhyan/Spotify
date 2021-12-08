@@ -12,7 +12,6 @@ class AuthViewViewController: UIViewController, WKNavigationDelegate {
     
     private let webView: WKWebView = {
         let config = WKWebViewConfiguration()
-        
         let webView = WKWebView(frame: .zero, configuration: config)
         return webView
     }()

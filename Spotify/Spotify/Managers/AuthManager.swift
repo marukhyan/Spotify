@@ -9,17 +9,22 @@ import Foundation
 
 final class AuthManager {
     static let shared = AuthManager()
+    private var refreshingToken = false
     
     struct Constans {
         static let clientID = "e9bdb377b5a145b38fa3ab18d3e9c167"
         static let clientSecret = "71fbfaacdd7740e6bdf07ba3960f45b2"
         static let tokenAPIURL = "https://accounts.spotify.com/api/token"
+        static let redirectURI = "http://localhost:8080"
+        static let scopes = "user-read-private%20playlist-modify-private%20playlist-read-private%20playlist-modify-public%20user-follow-read%20user-library-modify%20user-library-read%20user-read-email"
+        
     }
     
     private init() {}
     
     public var signInURL: URL? {
-        let string = "https://accounts.spotify.com/authorize?response_type=code&client_id=\(Constans.clientID)&scope=user-read-private&redirect_uri=http://localhost:8080&show_dialog=TRUE"
+        let base = "https://accounts.spotify.com/authorize"
+        let string = "\(base)?response_type=code&client_id=\(Constans.clientID)&scope=\(Constans.scopes)&redirect_uri=\(Constans.redirectURI)&show_dialog=TRUE"
         return URL(string: string)
     }
     
@@ -57,7 +62,7 @@ final class AuthManager {
         components.queryItems = [
             URLQueryItem(name: "grant_type", value: "authorization_code"),
             URLQueryItem(name: "code", value: code),
-            URLQueryItem(name: "redirect_uri", value: "http://localhost:8080")
+            URLQueryItem(name: "redirect_uri", value: Constans.redirectURI)
         ]
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -79,6 +84,8 @@ final class AuthManager {
             
             do {
                 let result = try JSONDecoder().decode(AuthResponse.self, from: data)
+                self?.onRefreshBlocks.forEach { $0(result.access_token) }
+                self?.onRefreshBlocks.removeAll()
                 self?.cacheToken(result: result)
                 completion(true)
             }
@@ -89,8 +96,38 @@ final class AuthManager {
         }
         task.resume()
     }
+    private var onRefreshBlocks = [((String) -> Void)]()
+    // Supplies valid token to be used with API Calls
+    
+    public func withValidToke(completion: @escaping (String) -> Void) {
+        guard !refreshingToken else {
+            
+            // Append the complition
+            onRefreshBlocks.append(completion)
+            return
+        }
+        if shouldRefreshToken {
+            
+            // Refresh
+            refreshIfNeeded { success in
+                if let token = self.accessToken, success {
+                    completion(token)
+                }
+            }
+        }else if let token = accessToken {
+            completion(token)
+        }
+    }
     
     public func refreshIfNeeded(completion: @escaping (Bool) -> Void) {
+        guard !refreshingToken else {
+            return
+        }
+        
+        guard shouldRefreshToken else {
+            completion(true)
+            return
+        }
         
         guard let refreshToken = self.refeshToken else {
             return
@@ -99,6 +136,8 @@ final class AuthManager {
         guard let url = URL(string: Constans.tokenAPIURL) else {
             return
         }
+        
+        refreshingToken = true
         
         var components = URLComponents()
         components.queryItems = [
@@ -118,6 +157,7 @@ final class AuthManager {
         }
         request.setValue("Basic \(base64String)", forHTTPHeaderField: "Authorization")
         let task = URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+            self?.refreshingToken = false
             guard let data = data, error == nil else {
                 completion(false)
                 return
@@ -144,5 +184,13 @@ final class AuthManager {
             
         }
         UserDefaults.standard.setValue(Date().addingTimeInterval(TimeInterval(result.expires_in)), forKey: "expirationDate")
+    }
+    
+    public func signOut(completion: (Bool) -> Void) {
+        UserDefaults.standard.setValue(nil, forKey: "access_token")
+        UserDefaults.standard.setValue(nil, forKey: "refresh_token")
+        UserDefaults.standard.setValue(nil, forKey: "expirationDate")
+        
+        completion(true)
     }
 }
