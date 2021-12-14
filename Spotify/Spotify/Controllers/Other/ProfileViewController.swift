@@ -8,7 +8,7 @@
 import UIKit
 
 class ProfileViewController: UIViewController {
-
+    
     private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.isHidden = true
