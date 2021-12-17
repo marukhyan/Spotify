@@ -73,6 +73,5 @@ class SearchResultSubtitleTableViewCell: UITableViewCell {
         } else {
             self.iconImageView.image = UIImage(systemName: "star")
         }
-        
     }
 }

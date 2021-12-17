@@ -71,6 +71,7 @@ final class PlaylistHeaderCollectionReusableView: UICollectionReusableView {
     
     @objc private func didTapPlayAll() {
         delegate?.playlistHeaderCollectionReusableViewDidTapPlayAll(self)
+        
     }
     
     
