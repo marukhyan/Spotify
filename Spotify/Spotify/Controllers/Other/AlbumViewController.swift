@@ -7,7 +7,7 @@
 
 import UIKit
 
-class AlbumViewController: UIViewController {
+final class AlbumViewController: UIViewController {
     
     private let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewCompositionalLayout(sectionProvider: { _, _ -> NSCollectionLayoutSection? in
         let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1)))
@@ -75,8 +75,6 @@ class AlbumViewController: UIViewController {
         super.viewDidLayoutSubviews()
         collectionView.frame = view.bounds
     }
-    
-    
 }
 
 
@@ -125,7 +123,5 @@ extension AlbumViewController: PlaylistHeaderCollectionReusableViewDelegate {
         
         PlayBackPresenter.shared.startPlayback(from: self, tracks: tracks)
     }
-    
-    
 }
 

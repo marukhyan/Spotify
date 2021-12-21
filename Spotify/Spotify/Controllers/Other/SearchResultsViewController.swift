@@ -17,7 +17,7 @@ protocol SearchResultsViewControllerDelegate: AnyObject {
     func didTapResult(_ result: SearchResult)
 }
 
-class SearchResultsViewController: UIViewController {
+final class SearchResultsViewController: UIViewController {
     
     private var sections: [SearchSection] = []
     

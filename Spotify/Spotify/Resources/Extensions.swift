@@ -5,8 +5,8 @@
 //  Created by David Marukhyan on 02.12.21.
 //
 
-import Foundation
 import UIKit
+
 extension UIView {
     
     var width: CGFloat {
