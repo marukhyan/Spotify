@@ -17,12 +17,11 @@ final class AuthManager {
         static let tokenAPIURL = "https://accounts.spotify.com/api/token"
         static let redirectURI = "http://localhost:8080"
         static let scopes = "user-read-private%20playlist-modify-private%20playlist-read-private%20playlist-modify-public%20user-follow-read%20user-library-modify%20user-library-read%20user-read-email"
-        
     }
     
     private init() {}
     
-    public var signInURL: URL? {
+    var signInURL: URL? {
         let base = "https://accounts.spotify.com/authorize"
         let string = "\(base)?response_type=code&client_id=\(Constans.clientID)&scope=\(Constans.scopes)&redirect_uri=\(Constans.redirectURI)&show_dialog=TRUE"
         return URL(string: string)
@@ -53,7 +52,7 @@ final class AuthManager {
         return currentDate.addingTimeInterval(fiveMinutes) >= expirationDate
     }
     
-    public func exchangeCodeForToken(code: String,completion: @escaping ((Bool) -> Void)) {
+    func exchangeCodeForToken(code: String,completion: @escaping ((Bool) -> Void)) {
         guard let url = URL(string: Constans.tokenAPIURL) else {
             return
         }
@@ -99,7 +98,7 @@ final class AuthManager {
     private var onRefreshBlocks = [((String) -> Void)]()
     // Supplies valid token to be used with API Calls
     
-    public func withValidToken(completion: @escaping (String) -> Void) {
+    func withValidToken(completion: @escaping (String) -> Void) {
         guard !refreshingToken else {
             
             // Append the complition
@@ -119,7 +118,7 @@ final class AuthManager {
         }
     }
     
-    public func refreshIfNeeded(completion: ((Bool) -> Void)?) {
+    func refreshIfNeeded(completion: ((Bool) -> Void)?) {
         guard !refreshingToken else {
             return
         }
@@ -181,12 +180,11 @@ final class AuthManager {
         UserDefaults.standard.setValue(result.access_token, forKey: "access_token")
         if let refresh_token = result.refresh_token {
             UserDefaults.standard.setValue(refresh_token, forKey: "refresh_token")
-            
         }
         UserDefaults.standard.setValue(Date().addingTimeInterval(TimeInterval(result.expires_in)), forKey: "expirationDate")
     }
     
-    public func signOut(completion: (Bool) -> Void) {
+    func signOut(completion: (Bool) -> Void) {
         UserDefaults.standard.setValue(nil, forKey: "access_token")
         UserDefaults.standard.setValue(nil, forKey: "refresh_token")
         UserDefaults.standard.setValue(nil, forKey: "expirationDate")

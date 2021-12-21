@@ -7,7 +7,7 @@
 
 import UIKit
 
-class FeaturedCollectionViewCell: UICollectionViewCell {
+final class FeaturedCollectionViewCell: UICollectionViewCell {
     static let identifier = "FeaturedCollectionViewCell"
     
     private let playlistCoverImageView: UIImageView = {

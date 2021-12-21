@@ -7,7 +7,7 @@
 
 import UIKit
 
-class NewReleaseCollectionViewCell: UICollectionViewCell {
+final class NewReleaseCollectionViewCell: UICollectionViewCell {
     static let identifier = "NewReleaseCollectionViewCell"
     
     private let albumCoverImageView: UIImageView = {

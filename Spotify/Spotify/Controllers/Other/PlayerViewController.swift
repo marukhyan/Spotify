@@ -7,7 +7,7 @@
 
 import UIKit
 
-class PlayerViewController: UIViewController {
+final class PlayerViewController: UIViewController {
     
     private let controlsView = PlayerControlsView()
     weak var dataSource: playerDataSource?
