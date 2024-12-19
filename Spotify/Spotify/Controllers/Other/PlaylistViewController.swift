@@ -7,7 +7,7 @@
 
 import UIKit
 
-class PlaylistViewController: UIViewController {
+final class PlaylistViewController: UIViewController {
     
     private let playlist: Playlist
     private let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewCompositionalLayout(sectionProvider: { _, _ -> NSCollectionLayoutSection? in
@@ -67,15 +67,11 @@ class PlaylistViewController: UIViewController {
                 }
             }
         }
-        
-        
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         collectionView.frame = view.bounds
     }
-    
-    
 }
 
 
@@ -123,7 +119,5 @@ extension PlaylistViewController: UICollectionViewDataSource {
 extension PlaylistViewController: PlaylistHeaderCollectionReusableViewDelegate {
     func playlistHeaderCollectionReusableViewDidTapPlayAll(_ header: PlaylistHeaderCollectionReusableView) {
         PlayBackPresenter.shared.startPlayback(from: self, tracks: tracks)
-    }
-    
-    
+    }  
 }

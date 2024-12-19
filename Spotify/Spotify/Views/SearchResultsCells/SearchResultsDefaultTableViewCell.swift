@@ -7,8 +7,7 @@
 
 import UIKit
 
-
-class SearchResultsDefaultTableViewCell: UITableViewCell {
+final class SearchResultsDefaultTableViewCell: UITableViewCell {
     static let identifier = "SearchResultsDefaultTableViewCell"
     private let label: UILabel = {
         let label = UILabel()
@@ -22,6 +21,7 @@ class SearchResultsDefaultTableViewCell: UITableViewCell {
         imageView.contentMode = .scaleAspectFill
         return imageView
     }()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(label)

@@ -21,7 +21,6 @@ enum BrowseSectionType {
             return "Recommended"
         }
     }
-    
 }
 
 class HomeViewController: UIViewController {

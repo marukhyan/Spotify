@@ -8,7 +8,7 @@
 import UIKit
 import WebKit
 
-class AuthViewViewController: UIViewController, WKNavigationDelegate {
+final class AuthViewViewController: UIViewController, WKNavigationDelegate {
     
     private let webView: WKWebView = {
         let config = WKWebViewConfiguration()
@@ -16,14 +16,16 @@ class AuthViewViewController: UIViewController, WKNavigationDelegate {
         return webView
     }()
     
-    public var completionHandler: ((Bool) -> Void)?
+    var completionHandler: ((Bool) -> Void)?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Sign In"
         view.backgroundColor = .systemBackground
+        
         webView.navigationDelegate = self
         view.addSubview(webView)
+        self.navigationController?.navigationBar.tintColor = UIColor.white
         guard let url = AuthManager.shared.signInURL else {
             return
         }

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CategoryViewController: UIViewController {
+final class CategoryViewController: UIViewController {
     
     let category: Category
     
@@ -21,15 +21,11 @@ class CategoryViewController: UIViewController {
         
         return NSCollectionLayoutSection(group: group)
     }))
-    
-    
-    
+
     init(category: Category) {
         self.category = category
         super.init(nibName: nil, bundle: nil)
     }
-    
-    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -57,7 +53,6 @@ class CategoryViewController: UIViewController {
                 }
             }
         }
-        
     }
     
     override func viewDidLayoutSubviews() {
